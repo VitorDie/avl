@@ -3,12 +3,65 @@
 #include <stdlib.h>
 #include "node.h"
 
+// PRIVATE //
+
 struct avl 
 {
     node_t *root;
 };
 
-// PRIVATE //
+int calculate_balance_value(node_t *node_reference)
+{
+    if (node_reference != NULL)
+    {
+        return node_get_height(node_get_left_node(node_reference)) - node_get_height(node_get_right_node(node_reference));
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+node_t *rotate_left(node_t *node_reference);
+node_t *rotate_right(node_t *node_reference);
+node_t *rotate_left_right(node_t *node_reference);
+node_t *rotate_right_left(node_t *node_reference);
+
+node_t *balance(node_t *node_reference)
+{
+    int balance_value = calculate_balance_value(node_reference);
+
+    if (balance_value < -1 && calculate_balance_value(node_get_right_node(node_reference)) <= 0)
+    {
+        node_reference = rotate_left(node_reference);
+    }
+
+    else if (balance_value > 1 && calculate_balance_value(node_get_left_node(node_reference)) >= 0)
+    {
+        node_reference = rotate_right(node_reference);
+    }
+
+    else if (balance_value > 1 && calculate_balance_value(node_get_right_node(node_reference)) < 0)
+    {
+        node_reference = rotate_left_right(node_reference);
+    }
+
+    else if (balance_value < -1 && calculate_balance_value(node_get_right_node(node_reference)) > 0)
+    {
+        node_reference = rotate_right_left(node_reference);
+    }
+
+    return node_reference;
+}
+
+int calculate_height(node_t *self)
+{
+    int left_height = node_get_height(node_get_left_node(self));
+    int right_height = node_get_height(node_get_right_node(self));
+    
+    int greater_height = left_height > right_height ? left_height : right_height;
+    greater_height += 1;
+}
 
 void set_root(node_t *root, avl_t *self) 
 {
@@ -47,10 +100,6 @@ node_t *insert(node_t *node, node_t* node_reference)
     return node_reference;
 }
 
-node_t *balance(node_t *node_reference);
-
-int calculate_height(node_t *self);
-
 // PUBLIC //
 
 avl_t *create_avl()
@@ -67,9 +116,21 @@ void avl_insert(node_t *node, avl_t *self)
     set_root(insert(node, get_root(self)), self);
 }
 
-node_t *avl_search(int value, avl_t *self);
+node_t *avl_search(int value, avl_t *self)
+{
+    // NOT IMPLEMENTED YET
+    return NULL;
+}
 
-void avl_update(int old_value, int new_value, avl_t *self);
+void avl_update(int old_value, int new_value, avl_t *self)
+{
+    // NOT IMPLEMENTED YET
+    return;
+}
 
-void avl_delete(int value, avl_t *self);
+void avl_delete(int value, avl_t *self)
+{
+    // NOT IMPLEMENTED YET
+    return;
+}
 
