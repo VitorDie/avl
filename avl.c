@@ -49,17 +49,28 @@ node_t *rotate_left(node_t *node_reference)
 
 node_t *rotate_right(node_t *node_reference)
 {
-    return NULL;
+    node_t *left_subtree = node_get_left_node(node_reference);
+    node_t *right_left_subtree = node_get_right_node(left_subtree);
+
+    node_set_right_node(node_reference, left_subtree);
+    node_set_left_node(right_left_subtree, node_reference);
+
+    node_set_height(calculate_height(node_reference), node_reference);
+    node_set_height(calculate_height(left_subtree), left_subtree);
+
+    return left_subtree;
 }
 
 node_t *rotate_left_right(node_t *node_reference)
 {
-    return NULL;
+    node_set_left_node(rotate_left(node_get_left_node(node_reference)), node_reference);
+    return rotate_right(node_reference);
 }
 
 node_t *rotate_right_left(node_t *node_reference)
 {
-    return NULL;
+    node_set_left_node(rotate_right(node_get_right_node(node_reference)), node_reference);
+    return rotate_left(node_reference);
 }
 
 node_t *balance(node_t *node_reference)
@@ -108,7 +119,7 @@ node_t *insert(node_t *node, node_t* node_reference)
         return node;
     }
 
-    if (node_get_value(node) < node_get_value(node_reference))
+    else if (node_get_value(node) < node_get_value(node_reference))
     {
         node_set_left_node(insert(node, node_get_left_node(node_reference)), node_reference);
     }
@@ -126,6 +137,30 @@ node_t *insert(node_t *node, node_t* node_reference)
     node_reference = balance(node_reference);
 
     return node_reference;
+}
+
+node_t *search(int value, node_t *node_reference)
+{
+    if (node_reference == NULL)
+    {
+        return NULL;
+    }
+
+    else if (node_get_value(node_reference) == value)
+    {
+        return node_reference;
+    }
+
+    else if (node_get_value(node_reference) < value)
+    {
+        search(value, node_get_left_node(node_reference));
+    }
+
+    else if (node_get_value(node_reference) > value)
+    {
+        search(value, node_get_right_node(node_reference));
+    }
+
 }
 
 // PUBLIC //
@@ -146,8 +181,7 @@ void avl_insert(node_t *node, avl_t *self)
 
 node_t *avl_search(int value, avl_t *self)
 {
-    // NOT IMPLEMENTED YET
-    return NULL;
+    return search(value, get_root(self));
 }
 
 void avl_update(int old_value, int new_value, avl_t *self)
