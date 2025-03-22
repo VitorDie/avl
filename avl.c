@@ -22,10 +22,45 @@ int calculate_balance_value(node_t *node_reference)
     }
 }
 
-node_t *rotate_left(node_t *node_reference);
-node_t *rotate_right(node_t *node_reference);
-node_t *rotate_left_right(node_t *node_reference);
-node_t *rotate_right_left(node_t *node_reference);
+int calculate_height(node_t *self)
+{
+    int left_height = node_get_height(node_get_left_node(self));
+    int right_height = node_get_height(node_get_right_node(self));
+    
+    int greater_height = left_height > right_height ? left_height : right_height;
+    greater_height += 1;
+
+    return greater_height;
+}
+
+node_t *rotate_left(node_t *node_reference)
+{
+    node_t *right_subtree = node_get_right_node(node_reference);
+    node_t *left_right_subtree = node_get_left_node(right_subtree);
+
+    node_set_left_node(node_reference,right_subtree);
+    node_set_right_node(left_right_subtree,node_reference);
+
+    node_set_height(calculate_height(node_reference), node_reference);
+    node_set_height(calculate_height(right_subtree), right_subtree);
+
+    return right_subtree;
+}
+
+node_t *rotate_right(node_t *node_reference)
+{
+    return NULL;
+}
+
+node_t *rotate_left_right(node_t *node_reference)
+{
+    return NULL;
+}
+
+node_t *rotate_right_left(node_t *node_reference)
+{
+    return NULL;
+}
 
 node_t *balance(node_t *node_reference)
 {
@@ -54,14 +89,7 @@ node_t *balance(node_t *node_reference)
     return node_reference;
 }
 
-int calculate_height(node_t *self)
-{
-    int left_height = node_get_height(node_get_left_node(self));
-    int right_height = node_get_height(node_get_right_node(self));
-    
-    int greater_height = left_height > right_height ? left_height : right_height;
-    greater_height += 1;
-}
+
 
 void set_root(node_t *root, avl_t *self) 
 {
