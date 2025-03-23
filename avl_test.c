@@ -30,6 +30,10 @@ int main(void)
     assert(avl_search(1, new_avl) == n1);
     assert(avl_search(3, new_avl) == n3);
 
+    avl_delete(3, new_avl);
+
+    assert(avl_search(3, new_avl) == NULL);
+
     free(new_avl);
     free(n1);
     free(n2);

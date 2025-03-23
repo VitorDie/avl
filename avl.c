@@ -64,6 +64,41 @@ node_t *search(int value, node_t *node_reference)
     }
 }
 
+void delete(int value, node_t *node_reference)
+{
+    if (node_reference == NULL)
+    {
+        perror("cannot delete, this element isn't into this tree");
+        return;
+    }
+
+    if (node_get_value(node_get_right_node(node_reference)) == value)
+    {
+        free(node_get_right_node(node_reference));
+        node_set_right_node(NULL, node_reference);
+        return;
+    }
+
+    if (node_get_value(node_get_left_node(node_reference)) == value)
+    {
+        free(node_get_left_node(node_reference));
+        node_set_left_node(NULL, node_reference);
+        return;
+    }
+
+    if (value > node_get_value(node_reference))
+    {
+        delete(value, node_get_right_node(node_reference));
+        return;
+    }
+
+    if (value < node_get_value(node_reference))
+    {
+        delete(value, node_get_left_node(node_reference));
+        return;
+    }
+}
+
 void avl_insert(node_t *node, avl_t *self)
 {
     self->root = insert(node, self->root);
@@ -74,8 +109,21 @@ node_t *avl_search(int value, avl_t *self)
     return search(value, self->root);
 }
 
-void avl_update(int old_value, int new_value, avl_t *self);
-void avl_delete(int value, avl_t *self);
+void avl_update(int old_value, int new_value, avl_t *self)
+{
+    /*
+    sem fazer o free, ele vai pesquisar igual o delete, e vai reaproveitar o nodo,
+    primeiro verifica se o new value existe na arvore, se não, aí ele vai fazer a substituição
+    vai encontrar o old_value, se sim, aponta do pai dele para null se for na direita ou na esquerda
+    pega esse old value, e modifica o valor dele para new value
+    e por fim insere ele com o novo valor novamente na arvore
+    */
+}
+
+void avl_delete(int value, avl_t *self)
+{
+    delete(value, self->root);
+}
 
 node_t *get_root(avl_t *self)
 {
