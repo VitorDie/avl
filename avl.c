@@ -27,16 +27,19 @@ node_t *insert(node_t *node, node_t *reference_node)
     if (node_get_value(node) > node_get_value(reference_node))
     {
         node_set_right_node(insert(node, node_get_right_node(reference_node)), reference_node);
+        return reference_node;
     }
 
     else if (node_get_value(node) < node_get_value(reference_node))
     {
         node_set_left_node(insert(node, node_get_left_node(reference_node)),reference_node);
+        return reference_node;
     }
 
     else
     {
         perror("[*] cannot insert, the element already exists [*]");
+        return NULL;
     }
 }
 
@@ -64,38 +67,29 @@ node_t *search(int value, node_t *node_reference)
     }
 }
 
-void delete(int value, node_t *node_reference)
+node_t *delete(int value, node_t *node_reference)
 {
     if (node_reference == NULL)
     {
         perror("cannot delete, this element isn't into this tree");
-        return;
-    }
-
-    if (node_get_value(node_get_right_node(node_reference)) == value)
-    {
-        free(node_get_right_node(node_reference));
-        node_set_right_node(NULL, node_reference);
-        return;
-    }
-
-    if (node_get_value(node_get_left_node(node_reference)) == value)
-    {
-        free(node_get_left_node(node_reference));
-        node_set_left_node(NULL, node_reference);
-        return;
+        return NULL;
     }
 
     if (value > node_get_value(node_reference))
     {
-        delete(value, node_get_right_node(node_reference));
-        return;
+        node_set_right_node(delete(value, node_get_right_node(node_reference)), node_reference);
+        return node_reference;
     }
 
     if (value < node_get_value(node_reference))
     {
-        delete(value, node_get_left_node(node_reference));
-        return;
+        node_set_left_node(delete(value, node_get_left_node(node_reference)), node_reference);
+        return node_reference;
+    }
+
+    if (node_get_value(node_reference) == value)
+    {
+        return NULL;
     }
 }
 
@@ -122,7 +116,7 @@ void avl_update(int old_value, int new_value, avl_t *self)
 
 void avl_delete(int value, avl_t *self)
 {
-    delete(value, self->root);
+    self->root = delete(value, self->root);
 }
 
 node_t *get_root(avl_t *self)

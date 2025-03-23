@@ -29,9 +29,14 @@ int main(void)
 
     assert(avl_search(1, new_avl) == n1);
     assert(avl_search(3, new_avl) == n3);
+    assert(node_get_value(n3) == 3);
+
+    avl_delete(5, new_avl);
 
     avl_delete(3, new_avl);
 
+    //assert(node_get_right_node(n2) == n3);
+    assert(node_get_right_node(n2) == NULL);
     assert(avl_search(3, new_avl) == NULL);
 
     free(new_avl);
