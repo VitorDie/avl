@@ -12,4 +12,6 @@ node_t *avl_search(int value, avl_t *self);
 void avl_update(int old_value, int new_value, avl_t *self);
 void avl_delete(int value, avl_t *self);
 
+// node_t *get_root(avl_t *self);
+
 #endif
