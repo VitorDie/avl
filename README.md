@@ -1,2 +1,2 @@
 # AVL
- A AVL made in C language
+ An AVL made in C language
